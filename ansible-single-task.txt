@@ -1,0 +1,55 @@
+1) Setup Module
+ansible webservers -m setup
+
+2) Command Module
+ansible webservers -m command -a 'uptime'
+ansible webservers -m command -a 'hostname'
+
+3) Shell Module
+ansible webservers -m shell -a 'ls -l > temp.txt'
+On the machines under webservers group check for the file created and run
+ansible webservers -m command -a 'cat temp.txt'
+
+4) User Module 
+- To add user
+ansible webservers -m user -a 'name=tomcat password=tomcat' --become
+- check user in target machines
+cat /etc/passwd | grep tomcat
+- To delete user
+Options: become – Privilege to the superuser to run the command, state - absent to delete the user
+ansible webservers -m user -a 'name=tomcat state=absent' --become
+
+5) File Module
+- Create a file
+ansible webservers -m file -a 'dest=/home/ansible/test.txt state=touch mode=600 owner=ansible group=ansible'
+- Delete a file
+ansible webservers -m file -a "dest=/home/ansible/test_dir/test.txt state=absent"
+- Create a directory
+Options: two parameters.
+Path(alias – name, dest) – This is the absolute path of the directory to be created.
+State – You should enter the value as 'directory.' By default, the value is 'file'.
+
+ansible webservers -m file -a "dest=/home/ansible/test_dir state=directory mode=755"
+- Delete a directory
+ansible webservers -m file -a "dest=/home/ansible/test_dir state=absent"
+
+6) Copy Module
+ansible webservers -m copy -a "src=sample.txt dest=/home/ansible/sample.txt"
+
+7) Managing Software Packages
+- Install GIT
+ansible webservers -m yum -a "name=git state=present" --become
+- Check if the package is installed & update it to the latest version.
+ansible webservers -m yum -a "name=git state=latest"
+- Install Apache Webserver
+ansible webservers -m yum -a "name=httpd state=present" --become
+- Check if Maven is installed or not.
+ansible webservers -m yum -a "name=maven state=absent" --become
+
+8) Managing Services Module
+- Starting a service
+ansible webservers -m service -a "name=httpd state=started" --become
+- Stopping a service
+ansible webservers -m service -a "name=httpd state=stopped" --become
+- Restarting a service
+ansible webservers -m service -a "name=httpd state=restarted" --become
