@@ -1,14 +1,14 @@
 ---
 #tomcat
-#  - name: add tomcat group
-#    group:
-#        name: tomcat
-#  - name: add tomcat user
-#    user:
-#        name: tomcat
-#        group: tomcat
-#        home: /user/share/tomcat
-#        createhome: no
+  - name: add tomcat group
+    group:
+        name: tomcat
+  - name: add tomcat user
+    user:
+        name: tomcat
+        group: tomcat
+        home: /user/share/tomcat
+        createhome: no
   - name: create /opt/tomcat directory
     file:
       path: /opt/tomcat
@@ -55,14 +55,17 @@
       dest: /opt/tomcat/conf/tomcat-users.xml
       insertafter: <tomcat-users>
       block: |
-          <role rolename="admin"/>
+          <role rolename="tomcat"/>
+          <role rolename="manager"/>
           <role rolename="manager-gui"/>
           <role rolename="manager-script"/>
           <role rolename="manager-jmx"/>
           <role rolename="manager-status"/>
+          <role rolename="admin"/>
           <role rolename="admin-gui"/>
           <role rolename="admin-script"/>
-          <user usename="ansible" password="ansible" roles="admin,manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script"/>
+          <user usename="tomcat" password="tomcat" roles="tomcat,manager,manager-gui,manager-script,manager-jmx,manager-status"/>
+          <user usename="ansible" password="ansible" roles="tomcat,admin,admin-gui,admin-script"/>
   - name: Copy manager.xml & host-manager.xml to conf/Catalina/localhost
     copy:
       src: /etc/ansible/roles/tomcat/config/
