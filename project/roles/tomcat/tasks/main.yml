@@ -55,9 +55,19 @@
       dest: /opt/tomcat/conf/tomcat-users.xml
       insertafter: <tomcat-users>
       block: |
-          <role rolename = "admin-gui" />
-          <role rolename = "manager-gui" />
-          <user username = "ansible" password = "123456789" roles = "admin-gui, manager-gui" />
+          <role rolename="admin"/>
+          <role rolename="manager-gui"/>
+          <role rolename="manager-script"/>
+          <role rolename="manager-jmx"/>
+          <role rolename="manager-status"/>
+          <role rolename="admin-gui"/>
+          <role rolename="admin-script"/>
+          <user usename="ansible" password="ansible" roles="admin,manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script"/>
+  - name: Copy manager.xml & host-manager.xml to conf/Catalina/localhost
+    copy:
+      src: /etc/ansible/roles/tomcat/config/
+      dest: /opt/tomcat/conf/Catalina/localhost/
+      mode: 0755
   - name: Start and enable Tomcat service
     systemd:
       name: tomcat
