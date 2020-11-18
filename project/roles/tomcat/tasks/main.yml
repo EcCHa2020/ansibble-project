@@ -53,7 +53,7 @@
   - name: edit tomcat-users.xml
     blockinfile:
       dest: /opt/tomcat/conf/tomcat-users.xml
-      insertafter: <tomcat-users>
+      marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
       insertbefore: </tomcat-users>
       block: |
           <role rolename="tomcat"/>

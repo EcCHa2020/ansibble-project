@@ -4,3 +4,4 @@
   roles:
     - ansible-oracle-java
     - tomcat
+    - tomcat-app

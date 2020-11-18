@@ -1,0 +1,4 @@
+---
+#uninstall
+  - name: Undeploy application on {{ansible_hostname}}
+    command: wget "http://{{tomcat_user}}:{{tomcat_pwd}}@{{publicIp}}:8080/manager/text/undeploy?path=/HelloWorld-Maven" -O - -q
