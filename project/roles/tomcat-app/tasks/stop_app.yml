@@ -1,11 +1,4 @@
 ---
 #ec2_local_ipv4
-  - name: Gather EC2 instance metadata
-    ec2_metadata_facts:
-        name: debug
-        debug: vars=ansible_ec2_local_ipv4
-        set_fact: publicIp="{{ hostvars[inventory_hostname]['ansible_ec2_public_ipv4'] }}"
-        delegate_to: webservers
-        delegate_facts: yes
   - name: Stop application on {{ansible_hostname}}
-    command: wget "http://{{tomcat_user}}:{{tomcat_pwd}}@{{publicIp}}:8080/manager/text/stop?path=/HelloWorld-Maven" -O - -q
+    command: wget "http://{{tomcat_user}}:{{tomcat_pwd}}@{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}:8080/manager/text/stop?path=/sample" -O - -q

@@ -1,0 +1,39 @@
+---
+#ec2_local_ipv4
+  - name: Check ec2.py exist
+    stat:
+      path: /etc/ansible/ec2.py
+      register: ec2_py_exist
+  - debug:
+      msg: "ec2.py exists"
+      when: ec2_py_exist.stat.exists
+  - name: Download ansible ec2.py
+      get_url:
+        url: "{{download_ec2_py_url}}"
+        dest: "{{download_ansible_folder}}"
+        remote_src: yes
+        when: not ec2_py_exist.stat.exists
+  - name: Check ec2.ini exist
+    stat:
+      path: /etc/ansible/ec2.ini
+      register: ec2_ini_exist
+  - debug:
+      msg: "ec2.ini exists"
+      when: ec2_ini_exist.stat.exists
+  - name: Download ansible ec2.ini
+      get_url:
+        url: "{{download_ec2_ini_url}}"
+        dest: "{{download_ansible_folder}}"
+        remote_src: yes
+        when: not ec2_ini_exist.stat.exists
+        
+  - name: Gather EC2 instance metadata
+    ec2_metadata_facts:
+        name: debug
+        debug: vars=ansible_ec2_local_ipv4
+        set_fact: publicIp="{{ hostvars[inventory_hostname]['ansible_ec2_public_ipv4'] }}"
+        delegate_to: webservers
+        delegate_facts: yes
+        
+  - name: Stop application on {{ansible_hostname}}
+    command: wget "http://{{tomcat_user}}:{{tomcat_pwd}}@{{publicIp}}:8080/manager/text/stop?path=/HelloWorld-Maven" -O - -q

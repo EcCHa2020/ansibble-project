@@ -1,4 +1,4 @@
 ---
 #start
   - name: Start application on {{ansible_hostname}}
-    command: wget "http://{{tomcat_user}}:{{tomcat_pwd}}@{{publicIp}}:8080/manager/text/start?path=/HelloWorld-Maven" -O - -q
+    command: wget "http://{{tomcat_user}}:{{tomcat_pwd}}@{{tomcat_pwd}}@{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}:8080/manager/text/start?path=/sample" -O - -q
