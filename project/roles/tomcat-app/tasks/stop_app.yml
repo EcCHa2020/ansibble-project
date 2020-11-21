@@ -1,4 +1,8 @@
 ---
 #ec2_local_ipv4
   - name: Stop application on {{ansible_hostname}}
-    command: wget "http://{{tomcat_user}}:{{tomcat_pwd}}@{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}:8080/manager/text/stop?path=/sample" -O - -q
+    uri:
+      url: http://{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}:8080/manager/text/stop?path=/devops-sample
+      url_username: "{{ tomcat_user }}"
+      url_password: "{{ tomcat_pwd }}"
+#-O -q

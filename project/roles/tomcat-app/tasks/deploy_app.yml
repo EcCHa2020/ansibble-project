@@ -2,5 +2,5 @@
 #Deploy
   - name: Deploy the new WAR file to target servers
     copy:
-      src: /etc/ansible/roles/tomcat/sample.war
-      dest: /opt/tomcat/webapps
+      src: /etc/ansible/roles/tomcat/devops-sample.war
+      dest: "/{{ tomcat_install_path }}/{{ tomcat_version }}/webapps"

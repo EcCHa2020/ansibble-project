@@ -1,6 +1,7 @@
 ---
-- hosts: webservers
-  become: true
+- name: Ansible myapp playbook
+  gather_facts: True
+  hosts: aws_region_ap_southeast_1
   roles:
     - ansible-oracle-java
     - tomcat

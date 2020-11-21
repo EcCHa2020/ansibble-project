@@ -1,4 +1,8 @@
 ---
 #uninstall
   - name: Undeploy application on {{ansible_hostname}}
-    command: wget "http://{{tomcat_user}}:{{tomcat_pwd}}@{{tomcat_pwd}}@{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}:8080/manager/text/undeploy?path=/sample" -O - -q
+    uri:
+      url: http://{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}:8080/manager/text/undeploy?path=/devops-sample
+      url_username: "{{ tomcat_user }}"
+      url_password: "{{ tomcat_pwd }}"
+#-O -q
