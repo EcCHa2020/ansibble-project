@@ -1,0 +1,4 @@
+---
+# vars file for tomcat-app
+tomcat_user: tomcat
+tomcat_pwd: tomcat

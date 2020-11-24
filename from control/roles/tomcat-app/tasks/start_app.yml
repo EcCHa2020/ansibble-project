@@ -1,0 +1,8 @@
+---
+#start
+  - name: Start application on {{ansible_hostname}}
+    uri:
+      url: http://{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}:8080/manager/text/start?path=/devops-sample
+      url_username: "{{ tomcat_user }}"
+      url_password: "{{ tomcat_pwd }}"
+#-O -q

@@ -1,0 +1,45 @@
+---
+#maven
+  - name: Check if maven is already installed
+    stat:
+      path: "{{ maven_install_path }}/{{ maven_version }}"
+    register: maven_installed
+  - block:
+    - name: create /opt/maven directory
+      file:
+        path: "{{ maven_install_path }}/{{ maven_version }}"
+        state: directory
+        mode: 0755
+      become: yes
+    - name: download & unarchive
+      unarchive:
+        src: "{{download_url}}"
+        dest: "{{ maven_install_path }}/{{ maven_version }}"
+        remote_src: yes
+        extra_opts: [--strip-components=1]
+      become: yes
+    - name: Change ownership
+      file:
+        path: "{{ maven_install_path }}/{{ maven_version }}"
+        owner: ansible
+        group: ansible
+        mode: "u+rwx,g+rx,o=rx"
+        recurse: yes
+        state: directory
+      become: yes
+
+    - name: Make Maven available for system
+      command: 'alternatives --install "/usr/bin/maven" "mvn" "{{maven_home}}/bin/mvn" 2000'
+      become: yes
+
+    - name: Set/Configure MVN_HOME in environment variables
+      shell: "echo 'export MVN_HOME={{maven_home}}\n PATH=$MVN_HOME/bin:$PATH:$HOME/.local/bin:$HOME/bin' > {{maven_env_file}}"
+      become: yes
+
+    - name: update source
+      shell: "source /etc/profile.d/maven.sh"
+      become: yes
+#– name: clone code
+#  shell: cd /tmp; /usr/bin/git clone https://github.com/shekharshamra/jenkin.git; cd /tmp/jenkin; mvn clean install
+
+    when: not maven_installed.stat.exists

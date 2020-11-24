@@ -1,0 +1,29 @@
+---
+  - name: Create an EC2 key
+    ec2_key:
+      name: "{{ project_name }}-{{ env }}-key"
+      region: "{{ region }}"
+    register: ec2_key
+
+  - name: Save private key
+    copy: content="{{ ec2_key.key.private_key }}" dest="../aws-private.pem" mode=0600
+    when: ec2_key.changed
+    
+  - name: Create an ec2 instance
+    ec2:
+      aws_access_key: AAKIASM343RWKZQVNDJY
+      aws_secret_key: X75ti/2Ye+/KXqwYg7OQ/sVth3S1cYKaMVlJ+YaB
+      key_name: "{{ project_name }}-{{ env }}-key"
+      group: "{{ security_group_id }}"
+      instance_type: "{{ instance_type}}"
+      image: "{{ ami }}"
+      wait: true
+      region: "{{ region }}"
+      count: 1 # default
+      count_tag:
+        Name: Demo
+      instance_tags:
+        Name: Demo
+      vpc_subnet_id: "{{ subnetid }}"
+      assign_public_ip: yes 
+    register: ec2

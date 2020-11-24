@@ -1,0 +1,9 @@
+---
+- name: Ansible myapp playbook
+  gather_facts: True
+  hosts: aws_region_ap_southeast_1
+  roles:
+    - ansible-oracle-java
+    - tomcat
+    - maven
+    - tomcat-app

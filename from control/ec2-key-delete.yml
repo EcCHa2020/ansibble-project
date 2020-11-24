@@ -1,0 +1,11 @@
+---
+  - hosts: local
+    connection: local
+    gather_facts: no
+    tasks:
+    - name: Delete a EC2 key
+      ec2_key:
+         name: nixcraft-key
+         region: ap-southeast-1
+#  absent means delete keypair
+         state: absent

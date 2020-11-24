@@ -4,7 +4,7 @@ Example -
 	install packages, 
 	start services.
 
-	
+
 It contains the following sections:
 	> Every playbook starts with 3 hyphens ‘—‘
 	> Host section – Defines the target machines on which the playbook should run. 

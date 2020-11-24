@@ -1,0 +1,69 @@
+which amazon-linux-extras
+
+sudo yum install -y amazon-linux-extras
+amazon-linux-extras | grep -i python
+
+sudo amazon-linux-extras enable python3.8
+sudo yum install python3.8
+sudo yum -y update
+sudo yum -y groupinstall "Development Tools"
+sudo yum -y install gcc bzip2-devel ncurses-devel gdbm-devel xz-devel sqlite-devel openssl-devel tk-devel uuid-devel readline-devel zlib-devel libffi-devel
+
+sudo yum -y install wget
+wget https://www.python.org/ftp/python/3.8.3/Python-3.8.3.tgz
+tar xvf Python-3.8.3.tgz
+cd Python-3.8*/
+./configure --enable-optimizations
+sudo make altinstall
+
+python3.8 --version
+Python 3.8.3
+----------------------------------------------------------------------------------
+To set Python 3.8 as default version use the update-alternatives command.
+sudo alternatives --install /usr/bin/python python /usr/bin/python3.8 1
+sudo update-alternatives --list | grep python
+
+To reset to Python 2 run the command:
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+
+sudo vi /usr/bin/yum 
+#!/usr/bin/python2
+sudo vi /usr/libexec/urlgrabber-ext-down
+#!/usr/bin/python2
+==================================================================================
+sudo python -m pip install pip --upgrade
+sudo python -m pip install ansible
+sudo python -m pip install boto3
+----------------------------------------
+if python 2 - sudo easy_install pip
+==================================================================================
+wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 
+sudo rpm -ivh epel-release-latest-7.noarch.rpm
+sudo yum install ansible -y 
+ansible --version 
+
+//Ansible configure
+sudo useradd ansible
+sudo passwd ansible
+
+sudo vi /etc/ssh/sshd_config
+//uncomment out the lines for PasswordAuthentication and PermitRootLogin
+sudo systemctl restart sshd
+
+sudo vi /etc/sudoers
+// ADD below line
+ec2-user        ALL=(ALL)       NOPASSWD: ALL
+ansible         ALL=(ALL)       NOPASSWD: ALL
+
+
+export AWS_ACCESS_KEY_ID='AKIASM343RWKZQVNDJYA'
+export AWS_SECRET_ACCESS_KEY='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'
+export ANSIBLE_CONFIG=/etc/ansible/ansible.cfg
+export ANSIBLE_HOSTS=/etc/ansible/ec2.py
+export EC2_INI_PATH=/etc/ansible/ec2.ini
+
+ssh-agent bash 
+ 
+ssh-keygen -f id_rsa.pub -m 'PEM' -e > id_rsa.pem
+
+ssh-add ~/.ssh/keypair.pem

@@ -1,0 +1,7 @@
+---
+# defaults file for maven
+download_url: http://ftp.meisei-u.ac.jp/mirror/apache/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+maven_install_path: /opt
+maven_version: apache-maven-3.6.3
+maven_home: "{{maven_install_path}}/{{maven_version}}"
+maven_env_file: "/etc/profile.d/maven.sh"

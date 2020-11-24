@@ -1,0 +1,79 @@
+---
+#tomcat
+  - name: Check if tomcat is already installed
+    stat:
+      path: "{{ tomcat_install_path }}/{{ tomcat_version }}"
+    register: tomcat_installed
+  - block:
+    - name: add tomcat group
+      group:
+         name: tomcat
+         state: present
+
+    - name: add tomcat user
+      user:
+         name: tomcat
+         group: tomcat
+         home: /user/share/tomcat
+         createhome: no
+         state: present
+
+    - name: create /opt/tomcat directory
+      file:
+        path: "{{ tomcat_install_path }}/{{ tomcat_version }}"
+        state: directory
+        mode: 0755
+
+    - name: download & unarchive
+      unarchive:
+        src: "{{download_url}}"
+        dest: "{{ tomcat_install_path }}/{{ tomcat_version }}"
+        remote_src: yes
+        extra_opts: [--strip-components=1]
+
+    - name: Change ownership
+      file:
+        path: "{{ tomcat_install_path }}/{{ tomcat_version }}"
+        owner: ansible
+        group: ansible
+        mode: "u+rwx,g+rx,o=rx"
+        recurse: yes
+        state: directory
+
+    - name: Copy Tomcat service from local to remote
+      copy:
+        src: /etc/ansible/roles/tomcat/tomcat.service
+        dest: /etc/systemd/system/
+        mode: 0755
+
+    - name: edit tomcat-users.xml
+      blockinfile:
+        dest: "{{ tomcat_install_path }}/{{ tomcat_version }}/conf/tomcat-users.xml"
+        marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+        insertbefore: </tomcat-users>
+        block: |
+            <role rolename="tomcat"/>
+            <role rolename="manager"/>
+            <role rolename="manager-gui"/>
+            <role rolename="manager-script"/>
+            <role rolename="manager-jmx"/>
+            <role rolename="manager-status"/>
+            <role rolename="admin"/>
+            <role rolename="admin-gui"/>
+            <role rolename="admin-script"/>
+            <user username="tomcat" password="tomcat" roles="tomcat,manager,manager-gui,manager-script,manager-jmx,manager-status"/>
+            <user username="ansible" password="ansible" roles="tomcat,admin,admin-gui,admin-script"/>
+    - name: Copy manager.xml & host-manager.xml to conf/Catalina/localhost
+      copy:
+        src: /etc/ansible/roles/tomcat/config/
+        dest: "{{ tomcat_install_path }}/{{ tomcat_version }}/conf/Catalina/localhost/"
+        mode: 0755
+
+    - name: Start and enable Tomcat service
+      systemd:
+        name: tomcat
+        state: started
+        enabled: true
+        daemon_reload: true
+
+    when: not tomcat_installed.stat.exists

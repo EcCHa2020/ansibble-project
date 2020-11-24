@@ -1,0 +1,8 @@
+---
+# defaults file for ansible-oracle-java
+download_url: https://javadl.oracle.com/webapps/download/GetFile/1.8.0_271-b09/61ae65e088624f5aaa0b1d2d801acb16/linux-i586/jdk-8u271-linux-x64.tar.gz
+download_folder: /opt
+java_name: "{{download_folder}}/jdk1.8.0_271"
+java_archive: "{{download_folder}}/jdk-8u271-linux-x64.tar.gz"
+java_env_file: "/etc/profile.d/java.sh"
+java_home: /opt/jdk1.8.0_271

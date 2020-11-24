@@ -3,16 +3,6 @@ export ANSIBLE_CONFIG=/etc/ansible/ansible.cfg
 python3 -m venv env
 
 source ./env/bin/activate
-sudo python3 -m pip install pip --upgrade
-sudo python -m pip uninstall ansible 
-sudo python3 -m pip install ansible
-sudo python3 -m pip install boto3
-
-sudo easy_install pip
-sudo python -m pip install ansible
-sudo python -m pip install boto
-sudo yum install python2-pip
-
 *****************************************************************
 Edit ansible.cfg
 enable_plugins = aws_ec2

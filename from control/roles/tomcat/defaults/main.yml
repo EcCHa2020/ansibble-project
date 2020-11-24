@@ -1,0 +1,5 @@
+---
+# defaults file for tomcat
+download_url: http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.60/bin/apache-tomcat-8.5.60.tar.gz
+tomcat_install_path: /opt
+tomcat_version: apache-tomcat-8.5.59
