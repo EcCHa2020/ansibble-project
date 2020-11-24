@@ -1,19 +1,22 @@
 ---
   - name: Create an EC2 key
+
     ec2_key:
-      name: "{{ project_name }}-{{ env }}-key"
+      aws_access_key: AKIASM343RWKRW7JVZ7C
+      aws_secret_key: 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
+      name: "aws_private.pem"
       region: "{{ region }}"
     register: ec2_key
 
   - name: Save private key
-    copy: content="{{ ec2_key.key.private_key }}" dest="../aws-private.pem" mode=0600
+    copy: content="{{ ec2_key.key.private_key }}" dest=/home/ansible/aws_private.pem mode=0600
     when: ec2_key.changed
-    
+
   - name: Create an ec2 instance
     ec2:
-      aws_access_key: AAKIASM343RWKZQVNDJY
-      aws_secret_key: X75ti/2Ye+/KXqwYg7OQ/sVth3S1cYKaMVlJ+YaB
-      key_name: "{{ project_name }}-{{ env }}-key"
+      aws_access_key: AKIASM343RWKRW7JVZ7C
+      aws_secret_key: 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
+      key_name: aws_private
       group: "{{ security_group_id }}"
       instance_type: "{{ instance_type}}"
       image: "{{ ami }}"
@@ -25,5 +28,5 @@
       instance_tags:
         Name: Demo
       vpc_subnet_id: "{{ subnetid }}"
-      assign_public_ip: yes 
+      assign_public_ip: yes
     register: ec2

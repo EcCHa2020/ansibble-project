@@ -25,6 +25,8 @@ sudo update-alternatives --list | grep python
 
 To reset to Python 2 run the command:
 sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+//chenage version
+sudo update-alternatives --config python
 
 sudo vi /usr/bin/yum 
 #!/usr/bin/python2
@@ -56,8 +58,8 @@ ec2-user        ALL=(ALL)       NOPASSWD: ALL
 ansible         ALL=(ALL)       NOPASSWD: ALL
 
 
-export AWS_ACCESS_KEY_ID='AKIASM343RWKZQVNDJYA'
-export AWS_SECRET_ACCESS_KEY='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'
+export AWS_ACCESS_KEY_ID=AKIASM343RWKRW7JVZ7C
+export AWS_SECRET_ACCESS_KEY=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
 export ANSIBLE_CONFIG=/etc/ansible/ansible.cfg
 export ANSIBLE_HOSTS=/etc/ansible/ec2.py
 export EC2_INI_PATH=/etc/ansible/ec2.ini
